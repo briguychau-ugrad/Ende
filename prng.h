@@ -15,13 +15,13 @@
  *
  * Author information at http://www.brianchau.ca/
  *
- * secret.h
+ * prng.h
  *
- * Header file for secret functions
+ * Header file for PRNG functions
  */
-#ifndef _SECRET_H
-#define _SECRET_H
-class Secret {
+#ifndef _PRNG_H
+#define _PRNG_H
+class Prng {
 private:
 	static const long long PRNG_1_VALS[5];
 	static const long long PRNG_2_VALS[5];
