@@ -15,25 +15,20 @@
  *
  * Author information at http://www.brianchau.ca/
  *
- * hash.h
+ * util.h
  *
- * Header file for hash functions
+ * Header file for utility functions
  */
-#ifndef _HASH_H
-#define _HASH_H
-class Hash {
-private:
-	static const char VALS_A[16];
-	static const char VALS_B[16];
-	static const int SHIFT_A[16];
-	static const int SHIFT_B[16];
-	static char* arr;
-	static long long hsize;
-	static char get(int index, char f);
-	static char shl(char val, char n);
-	static char func(char a, char c, int x);
-public:
-	static int generateHashA(char* input, long long size);
-	static int generateHashB(char* input, long long size);
-};
- #endif
+#ifndef _UTIL_H
+#define _UTIL_H
+namespace Util {
+	void writeBigEndianInt(char* arr, long long index, int value);
+	void writeLittleEndianInt(char* arr, long long index, int value);
+	void writeBigEndianLong(char* arr, long long index, long long value);
+	void writeLittleEndianLong(char* arr, long long index, long long value);
+	int readBigEndianInt(char* arr, long long index);
+	int readLittleEndianInt(char* arr, long long index);
+	long long readBigEndianLong(char* arr, long long index);
+	long long readLittleEndianLong(char* arr, long long index);
+}
+#endif

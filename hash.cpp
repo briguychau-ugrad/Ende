@@ -38,7 +38,7 @@ const int Hash::SHIFT_B[16] = {5, 3, 0, 3,
 			       4, 1, 2, 6,
 			       1, 5, 1, 3 };
 char* Hash::arr;
-long Hash::hsize;
+long long Hash::hsize;
 char Hash::get(int index, char f) {
 	if (index >= hsize) {
 		if (index - hsize > 3) throw -1;
@@ -80,7 +80,7 @@ char Hash::func(char a, char c, int x) {
 	}
 	throw -1;
 }
-int Hash::generateHashA(char* input, long size) {
+int Hash::generateHashA(char* input, long long size) {
 	arr = input;
 	hsize = size;
 	char A = 0x62;
@@ -112,7 +112,7 @@ int Hash::generateHashA(char* input, long size) {
 	// return in big endian
 	return (((int)A << 24) & 0xff000000) + (((int)B << 16) & 0x00ff0000) + (((int)C << 8) & 0x0000ff00) + (((int)D) & 0x000000ff);
 }
-int Hash::generateHashB(char* input, long size) {
+int Hash::generateHashB(char* input, long long size) {
 	arr = input;
 	hsize = size;
 	char A = 0x84;
