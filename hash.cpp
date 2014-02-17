@@ -1,7 +1,7 @@
 /**
  * Simple File Encryption/Decription System, C++ version
  *
- * Copyright (c) Brian Chau, 2013
+ * Copyright (c) Brian Chau, 2013-2014
  *
  * me@brianchau.ca
  *
