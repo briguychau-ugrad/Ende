@@ -1,5 +1,5 @@
 /**
- * Simple File Encryption/Decription System, C++ version
+ * Simple File Encryption/Decryption System, C++ version
  *
  * Copyright (c) Brian Chau, 2013-2014
  *
