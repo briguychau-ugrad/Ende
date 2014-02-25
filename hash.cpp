@@ -30,7 +30,7 @@ const char Hash::VALS_B[16] = {(char)0x2a, (char)0x04, (char)0x14, (char)0x61,
 			       (char)0xc4, (char)0xe9, (char)0xf4, (char)0x3e,
 			       (char)0xbb, (char)0xa2, (char)0xb3, (char)0xbc,
 			       (char)0xf8, (char)0x1a, (char)0x3c, (char)0xe4 };
-const unsigned int Hash::VALS_SHA2_256[64] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+const unsigned int Hash::VALS_SHA_256[64] = {0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
 					      0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
 					      0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
 					      0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
@@ -69,7 +69,7 @@ char Hash::get(int index, char f) {
 	}
 	return arr[index];
 }
-char Hash::getSHA2_256(long long index, char* first, char* second, long long firstsize) {
+char Hash::getSHA_256(long long index, char* first, char* second, long long firstsize) {
 	if (index < firstsize)
 		return first[index];
 	else
@@ -181,7 +181,7 @@ int Hash::generateHashB(char* input, long long size) {
 	// return in big endian
 	return (((int)A << 24) & 0xff000000) + (((int)B << 16) & 0x00ff0000) + (((int)C << 8) & 0x0000ff00) + (((int)D) & 0x000000ff);
 }
-char* Hash::generateSHA2_256(char* input, long long size) {
+char* Hash::generateSHA_256(char* input, long long size) {
 	// Generate a new array for the "padding" of the SHA-2 algorithm
 	long long arrsize = ((64 - ((size + 9) % 64)) % 64) + 9;
 	char* arr = (char*)calloc(arrsize, sizeof(char));
@@ -203,7 +203,7 @@ char* Hash::generateSHA2_256(char* input, long long size) {
 			w[i] = 0;
 			for (int j = 0; j < 4; j++) {
 				w[i] <<= 8;
-				w[i] += (unsigned int)(getSHA2_256((k << 6) + (i << 2) + j, input, arr, size) & 0x000000ff);
+				w[i] += (unsigned int)(getSHA_256((k << 6) + (i << 2) + j, input, arr, size) & 0x000000ff);
 			}
 		}
 		for (int i = 16; i < 64; i++) {
@@ -222,7 +222,7 @@ char* Hash::generateSHA2_256(char* input, long long size) {
 		for (int i = 0; i < 64; i++) {
 			s1 = rotr32u(e, 6) ^ rotr32u(e, 11) ^ rotr32u(e, 25);
 			ch = (e & f) ^ ((~e) & g);
-			temp1 = h + s1 + ch + VALS_SHA2_256[i] + w[i];
+			temp1 = h + s1 + ch + VALS_SHA_256[i] + w[i];
 			s0 = rotr32u(a, 2) ^ rotr32u(a, 13) ^ rotr32u(a, 22);
 			maj = (a & b) ^ (a & c) ^ (b & c);
 			temp2 = s0 + maj;
