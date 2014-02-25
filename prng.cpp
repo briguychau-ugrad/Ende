@@ -25,8 +25,17 @@ const long long Prng::PRNG_1_VALS[5] = {135317LL, 610279LL, 1LL<<60, 28, 17LL};
 const long long Prng::PRNG_2_VALS[5] = {292069LL, 1429LL, 1LL<<48, 16, 157LL};
 long long Prng::prng1Value;
 long long Prng::prng2Value;
-int Prng::mt[624];
+unsigned int Prng::mt[624];
 int Prng::mtIndex;
+void Prng::mtGenerate() {
+	for (int i = 0; i < 624; i++) {
+		unsigned int y = (mt[i] & 0x80000000) + (mt[(i + 1) % 624] & 0x7fffffff);
+		mt[i] = mt[(i + 397) % 624] ^ (y >> 1);
+		if (y % 2 != 0) {
+			mt[i] ^= 0x9908b0df;
+		}
+	}
+}
 void Prng::initPrng1(long long seed) {
 	prng1Value = seed;
 	int x = (int)PRNG_1_VALS[4];
@@ -43,9 +52,9 @@ void Prng::initPrng2(long long seed) {
 }
 void Prng::initMT(int seed) {
 	mtIndex = 0;
-	mt[0] = seed;
+	mt[0] = (unsigned int)seed;
 	for (int i = 1; i < 624; i++) {
-		mt[i] = 0x6c078965 * (mt[i-1] ^ (mt[i-1] >> 30)) + i;
+		mt[i] = (0x6c078965 * (mt[i-1] ^ (mt[i-1] >> 30))) + i;
 	}
 }
 int Prng::getPrng1() {
@@ -63,20 +72,11 @@ int Prng::getPrng2() {
 int Prng::getMT() {
 	if (mtIndex == 0)
 		mtGenerate();
-	int y = mt[index];
+	unsigned int y = mt[mtIndex++];
 	y ^= (y >> 11);
 	y ^= ((y << 7) & 0x9d2c5680);
 	y ^= ((y << 15) & 0xefc60000);
 	y ^= (y >> 18);
-	index = (index + 1) % 624;
-	return y;
-}
-void Prng::mtGenerate() {
-	for (int i = 0; i < 624; i++) {
-		int y = mt[i] & 0x80000000 + (mt[(i + 1) % 624] & 0x7fffffff);
-		mt[i] = mt[(i + 397) % 624] ^ (y >> 1);
-		if (y % 2 != 0) {
-			mt[i] ^= 0x9908b0df;
-		}
-	}
+	mtIndex %= 624;
+	return (int)y;
 }
