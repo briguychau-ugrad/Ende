@@ -25,15 +25,21 @@ class Hash {
 private:
 	static const char VALS_A[16];
 	static const char VALS_B[16];
+	static const unsigned int VALS_SHA2_256[64];
 	static const int SHIFT_A[16];
 	static const int SHIFT_B[16];
 	static char* arr;
 	static long long hsize;
 	static char get(int index, char f);
-	static char shl(char val, char n);
+	static char getSHA2_256(long long index, char* first, char* second, long long firstsize);
+	static char rotl8(char val, int n);
+	static unsigned int rotl32u(unsigned int val, int n);
+	static char rotr8(char val, int n);
+	static unsigned int rotr32u(unsigned int val, int n);
 	static char func(char a, char c, int x);
 public:
 	static int generateHashA(char* input, long long size);
 	static int generateHashB(char* input, long long size);
+	static char* generateSHA2_256(char* input, long long size);
 };
  #endif
