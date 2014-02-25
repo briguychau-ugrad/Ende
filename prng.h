@@ -27,10 +27,15 @@ private:
 	static const long long PRNG_2_VALS[5];
 	static long long prng1Value;
 	static long long prng2Value;
+	static int mt[624];
+	static int mtIndex;
+	static void mtGenerate();
 public:
 	static void initPrng1(long long seed);
 	static void initPrng2(long long seed);
+	static void initMT(int seed);
 	static int getPrng1();
 	static int getPrng2();
+	static int getMT();
 };
 #endif
