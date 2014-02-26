@@ -19,7 +19,10 @@
  *
  * Utility functions
  */
+#include "hash.h"
+#include "prng.h"
 #include "util.h"
+#include <cstdlib>
 namespace Util {
 	void writeBigEndianInt(char* arr, long long index, int value) {
 		arr[index++] = (char)((value >> 24) & 0x000000ff);
@@ -84,5 +87,25 @@ namespace Util {
 		     | (((long long)arr[index+5] << 40) & 0x0000ff0000000000LL)
 		     | (((long long)arr[index+6] << 48) & 0x00ff000000000000LL)
 		     | (((long long)arr[index+7] << 56) & 0xff00000000000000LL);
+	}
+	char* generateSaltedPassword(char* pw, int time) {
+		long long l;
+		for (l = 0; pw[l] != '\0'; l++) {
+		}
+		int mt_seed = Hash::generateHashA(pw, l) ^ Hash::generateHashB(pw, l);
+		Prng::initMT(mt_seed);
+		for (int i = 0; i < time % 128; i++) {
+			Prng::getMT();
+		}
+		char* arr = (char*)std::malloc((l + 17) * sizeof(char));
+		for (int i = 0; i < l; i++) {
+			arr[i] = pw[i];
+		}
+		writeBigEndianInt(arr, l, Prng::getMT());
+		writeBigEndianInt(arr, l + 4, Prng::getMT());
+		writeBigEndianInt(arr, l + 8, Prng::getMT());
+		writeBigEndianInt(arr, l + 12, Prng::getMT());
+		arr[l + 16] = 0;
+		return arr;
 	}
 }

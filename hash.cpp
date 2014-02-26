@@ -193,7 +193,7 @@ int Hash::generateHashB(char* input, long long size) {
 char* Hash::generateSHA_256(char* input, long long size) {
 	// Generate a new array for the "padding" of the SHA-2 algorithm
 	long long arrsize = ((64 - ((size + 9) % 64)) % 64) + 9;
-	char* arr = (char*)calloc(arrsize, sizeof(char));
+	char* arr = (char*)std::calloc(arrsize, sizeof(char));
 	arr[0] = 0x80;
 	Util::writeBigEndianLong(arr, arrsize - 8, size << 3);
 	arr[arrsize-9] |= (char)((size >> 29) & 0x00000007);
@@ -254,8 +254,8 @@ char* Hash::generateSHA_256(char* input, long long size) {
 		h6 += g;
 		h7 += h;
 	}
-	free(arr);
-	arr = (char*)malloc(32 * sizeof(char));
+	std::free(arr);
+	arr = (char*)std::malloc(32 * sizeof(char));
 	Util::writeBigEndianInt(arr, 0, h0);
 	Util::writeBigEndianInt(arr, 4, h1);
 	Util::writeBigEndianInt(arr, 8, h2);
@@ -269,7 +269,7 @@ char* Hash::generateSHA_256(char* input, long long size) {
 char* Hash::generateSHA_512(char* input, long long size) {
 	// Generate a new array for the "padding" of the SHA-2 algorithm
 	long long arrsize = ((128 - ((size + 17) % 128)) % 128) + 17;
-	char* arr = (char*)calloc(arrsize, sizeof(char));
+	char* arr = (char*)std::calloc(arrsize, sizeof(char));
 	arr[0] = 0x80;
 	Util::writeBigEndianLong(arr, arrsize - 8, size << 3);
 	arr[arrsize-9] = (char)((size >> 61) & 0x00000007);
@@ -330,8 +330,8 @@ char* Hash::generateSHA_512(char* input, long long size) {
 		h6 += g;
 		h7 += h;
 	}
-	free(arr);
-	arr = (char*)malloc(64 * sizeof(char));
+	std::free(arr);
+	arr = (char*)std::malloc(64 * sizeof(char));
 	Util::writeBigEndianLong(arr, 0, h0);
 	Util::writeBigEndianLong(arr, 8, h1);
 	Util::writeBigEndianLong(arr, 16, h2);

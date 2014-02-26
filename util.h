@@ -30,5 +30,6 @@ namespace Util {
 	int readLittleEndianInt(char* arr, long long index);
 	long long readBigEndianLong(char* arr, long long index);
 	long long readLittleEndianLong(char* arr, long long index);
+	char* generateSaltedPassword(char* pw, int time);
 }
 #endif
