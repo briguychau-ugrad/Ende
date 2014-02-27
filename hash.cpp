@@ -62,15 +62,13 @@ const int Hash::SHIFT_B[16] = {5, 3, 0, 3,
 			       7, 2, 6, 4,
 			       4, 1, 2, 6,
 			       1, 5, 1, 3 };
-char* Hash::arr;
-long long Hash::hsize;
-char Hash::get(int index, char f) {
-	if (index >= hsize) {
-		if (index - hsize > 3) throw -1;
+char Hash::get(int index, char f, char* arr, long long arrsize) {
+	if (index >= arrsize) {
+		if (index - arrsize > 3) throw -1;
 		if (f == 'A')
-			return index - hsize;
+			return index - arrsize;
 		if (f == 'B') {
-			switch (index - hsize) {
+			switch (index - arrsize) {
 				case 0:
 					return 0x11;
 				case 1:
@@ -126,14 +124,12 @@ char Hash::func(char a, char c, int x) {
 	throw -1;
 }
 int Hash::generateHashA(char* input, long long size) {
-	arr = input;
-	hsize = size;
 	char A = 0x62;
 	char B = 0x49;
 	char C = 0xfc;
 	char D = 0x3f;
 	// Get number of iterations
-	int iterations = (hsize / 4) + 1;
+	int iterations = (size / 4) + 1;
 	for (int i = 0; i < iterations; i++) {
 		for (int j = 0; j < 16; j++) {
 			int k = 4 * i;
@@ -147,25 +143,22 @@ int Hash::generateHashA(char* input, long long size) {
 				k += j % 4;
 			}
 			char oldA = A;
-			A = rotl8((B + D) + get(k, 'A') + VALS_A[j], SHIFT_A[j]);
+			A = rotl8((B + D) + get(k, 'A', input, size) + VALS_A[j], SHIFT_A[j]);
 			B = C ^ oldA;
 			C = D;
 			D = oldA;
 		}
 	}
-	arr = NULL;
 	// return in big endian
 	return (((int)A << 24) & 0xff000000) + (((int)B << 16) & 0x00ff0000) + (((int)C << 8) & 0x0000ff00) + (((int)D) & 0x000000ff);
 }
 int Hash::generateHashB(char* input, long long size) {
-	arr = input;
-	hsize = size;
 	char A = 0x84;
 	char B = 0x5d;
 	char C = 0x6f;
 	char D = 0xff;
 	// Get number of iterations
-	int iterations = ((hsize - 1) / 4) + 1;
+	int iterations = ((size - 1) / 4) + 1;
 	for (int i = 0; i < iterations; i++) {
 		for (int j = 0; j < 16; j++) {
 			int k = 4 * i;
@@ -183,10 +176,9 @@ int Hash::generateHashB(char* input, long long size) {
 			A = D;
 			D = C;
 			C += B;
-			B = rotl8((func(oldA, oldC, j % 4) + get(k, 'B')) ^ VALS_B[j], SHIFT_B[j]);
+			B = rotl8((func(oldA, oldC, j % 4) + get(k, 'B', input, size)) ^ VALS_B[j], SHIFT_B[j]);
 		}
 	}
-	arr = NULL;
 	// return in big endian
 	return (((int)A << 24) & 0xff000000) + (((int)B << 16) & 0x00ff0000) + (((int)C << 8) & 0x0000ff00) + (((int)D) & 0x000000ff);
 }

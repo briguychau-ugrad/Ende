@@ -29,9 +29,7 @@ private:
 	static const unsigned long long VALS_SHA_512[80];
 	static const int SHIFT_A[16];
 	static const int SHIFT_B[16];
-	static char* arr;
-	static long long hsize;
-	static char get(int index, char f);
+	static char get(int index, char f, char* arr, long long arrsize);
 	static char get_two(long long index, char* first, char* second, long long firstsize);
 	static char rotl8(char val, int n);
 	static unsigned int rotr32u(unsigned int val, int n);
