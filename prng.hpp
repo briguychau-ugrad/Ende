@@ -21,21 +21,35 @@
  */
 #ifndef _PRNG_HPP
 #define _PRNG_HPP
-class Prng {
+class Lcg1 {
 private:
-	static const long long PRNG_1_VALS[5];
-	static const long long PRNG_2_VALS[5];
-	static long long prng1Value;
-	static long long prng2Value;
-	static unsigned int mt[624];
-	static int mtIndex;
-	static void mtGenerate();
+	static const long long VALS[5];
+	long long value;
 public:
-	static void initPrng1(long long seed);
-	static void initPrng2(long long seed);
-	static void initMT(int seed);
-	static int getPrng1();
-	static int getPrng2();
-	static int getMT();
+	Lcg1();
+	Lcg1(long long s);
+	void seed(long long s);
+	int get();
+};
+class Lcg2 {
+private:
+	static const long long VALS[5];
+	long long value;
+public:
+	Lcg2();
+	Lcg2(long long s);
+	void seed(long long s);
+	int get();
+};
+class MersenneTwister {
+private:
+	unsigned int arr[624];
+	int index;
+	void generate();
+public:
+	MersenneTwister();
+	MersenneTwister(int s);
+	void seed(int s);
+	int get();
 };
 #endif

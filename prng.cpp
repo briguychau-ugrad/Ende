@@ -20,63 +20,82 @@
  * PRNG functions
  */
 #include "prng.hpp"
-// arr[0] = A, arr[1] = C, arr[2] = M, arr[3] = mod, arr[4] = initial advances
-const long long Prng::PRNG_1_VALS[5] = {135317LL, 610279LL, 1LL<<60, 28, 17LL};
-const long long Prng::PRNG_2_VALS[5] = {292069LL, 1429LL, 1LL<<48, 16, 157LL};
-long long Prng::prng1Value;
-long long Prng::prng2Value;
-unsigned int Prng::mt[624];
-int Prng::mtIndex;
-void Prng::mtGenerate() {
-	for (int i = 0; i < 624; i++) {
-		unsigned int y = (mt[i] & 0x80000000) + (mt[(i + 1) % 624] & 0x7fffffff);
-		mt[i] = mt[(i + 397) % 624] ^ (y >> 1);
+#include <ctime>
+// VALS[0] = A, VALS[1] = C, VALS[2] = M, VALS[3] = mod, VALS[4] = initial advances
+const long long Lcg1::VALS[5] = {135317LL, 610279LL, 1LL<<60, 28, 17LL};
+Lcg1::Lcg1() {
+	seed(std::time(0));
+}
+Lcg1::Lcg1(long long s) {
+	seed(s);
+}
+void Lcg1::seed(long long s) {
+	value = s;
+	int x = (int)VALS[4];
+	while (x--) {
+		get();
+	}
+}
+int Lcg1::get() {
+	value *= VALS[0];
+	value += VALS[1];
+	value %= VALS[2];
+	return (int)(value >> VALS[3]);
+}
+const long long Lcg2::VALS[5] = {292069LL, 1429LL, 1LL<<48, 16, 157LL};
+Lcg2::Lcg2() {
+	seed(std::time(0));
+}
+Lcg2::Lcg2(long long s) {
+	seed(s);
+}
+void Lcg2::seed(long long s) {
+	value = s;
+	int x = (int)VALS[4];
+	while (x--) {
+		get();
+	}
+}
+int Lcg2::get() {
+	value *= VALS[0];
+	value += VALS[1];
+	value %= VALS[2];
+	return (int)(value >> VALS[3]);
+}
+MersenneTwister::MersenneTwister() {
+	index = -1;
+	seed(std::time(0));
+}
+MersenneTwister::MersenneTwister(int s) {
+	index = -1;
+	seed(s);
+}
+void MersenneTwister::generate() {
+	for (index = 0; index < 624; index++) {
+		unsigned int y = (arr[index] & 0x80000000) + (arr[(index + 1) % 624] & 0x7fffffff);
+		arr[index] = arr[(index + 397) % 624] ^ (y >> 1);
 		if (y % 2 != 0) {
-			mt[i] ^= 0x9908b0df;
+			arr[index] ^= 0x9908b0df;
 		}
 	}
+	index = 0;
 }
-void Prng::initPrng1(long long seed) {
-	prng1Value = seed;
-	int x = (int)PRNG_1_VALS[4];
-	while (x--) {
-		getPrng1();
+void MersenneTwister::seed(int s) {
+	index = 0;
+	arr[index++] = (unsigned int)s;
+	for (; index < 624; index++) {
+		arr[index] = (0x6c078965 * (arr[index-1] ^ (arr[index-1] >> 30))) + index;
 	}
 }
-void Prng::initPrng2(long long seed) {
-	prng2Value = seed;
-	int x = (int)PRNG_2_VALS[4];
-	while (x--) {
-		getPrng2();
-	}
-}
-void Prng::initMT(int seed) {
-	mtIndex = 0;
-	mt[0] = (unsigned int)seed;
-	for (int i = 1; i < 624; i++) {
-		mt[i] = (0x6c078965 * (mt[i-1] ^ (mt[i-1] >> 30))) + i;
-	}
-}
-int Prng::getPrng1() {
-	prng1Value *= PRNG_1_VALS[0];
-	prng1Value += PRNG_1_VALS[1];
-	prng1Value %= PRNG_1_VALS[2];
-	return (int)(prng1Value >> PRNG_1_VALS[3]);
-}
-int Prng::getPrng2() {
-	prng2Value *= PRNG_2_VALS[0];
-	prng2Value += PRNG_2_VALS[1];
-	prng2Value %= PRNG_2_VALS[2];
-	return (int)(prng2Value >> PRNG_2_VALS[3]);
-}
-int Prng::getMT() {
-	if (mtIndex == 0)
-		mtGenerate();
-	unsigned int y = mt[mtIndex++];
+int MersenneTwister::get() {
+	if (index == -1)
+		seed(std::time(0));
+	if (index == 624)
+		generate();
+	unsigned int y = arr[index++];
 	y ^= (y >> 11);
 	y ^= ((y << 7) & 0x9d2c5680);
 	y ^= ((y << 15) & 0xefc60000);
 	y ^= (y >> 18);
-	mtIndex %= 624;
 	return (int)y;
 }

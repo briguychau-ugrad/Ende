@@ -93,18 +93,18 @@ namespace Util {
 		for (l = 0; pw[l] != '\0'; l++) {
 		}
 		int mt_seed = Hash::generateHashA(pw, l) ^ Hash::generateHashB(pw, l);
-		Prng::initMT(mt_seed);
+		MersenneTwister mt = MersenneTwister(mt_seed);
 		for (int i = 0; i < time % 128; i++) {
-			Prng::getMT();
+			mt.get();
 		}
 		char* arr = (char*)std::malloc((l + 17) * sizeof(char));
 		for (int i = 0; i < l; i++) {
 			arr[i] = pw[i];
 		}
-		writeBigEndianInt(arr, l, Prng::getMT());
-		writeBigEndianInt(arr, l + 4, Prng::getMT());
-		writeBigEndianInt(arr, l + 8, Prng::getMT());
-		writeBigEndianInt(arr, l + 12, Prng::getMT());
+		writeBigEndianInt(arr, l, mt.get());
+		writeBigEndianInt(arr, l + 4, mt.get());
+		writeBigEndianInt(arr, l + 8, mt.get());
+		writeBigEndianInt(arr, l + 12, mt.get());
 		arr[l + 16] = 0;
 		return arr;
 	}
