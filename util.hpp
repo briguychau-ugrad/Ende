@@ -15,27 +15,21 @@
  *
  * Author information at http://www.brianchau.ca/
  *
- * prng.h
+ * util.hpp
  *
- * Header file for PRNG functions
+ * Header file for utility functions
  */
-#ifndef _PRNG_H
-#define _PRNG_H
-class Prng {
-private:
-	static const long long PRNG_1_VALS[5];
-	static const long long PRNG_2_VALS[5];
-	static long long prng1Value;
-	static long long prng2Value;
-	static unsigned int mt[624];
-	static int mtIndex;
-	static void mtGenerate();
-public:
-	static void initPrng1(long long seed);
-	static void initPrng2(long long seed);
-	static void initMT(int seed);
-	static int getPrng1();
-	static int getPrng2();
-	static int getMT();
-};
+#ifndef _UTIL_HPP
+#define _UTIL_HPP
+namespace Util {
+	void writeBigEndianInt(char* arr, long long index, int value);
+	void writeLittleEndianInt(char* arr, long long index, int value);
+	void writeBigEndianLong(char* arr, long long index, long long value);
+	void writeLittleEndianLong(char* arr, long long index, long long value);
+	int readBigEndianInt(char* arr, long long index);
+	int readLittleEndianInt(char* arr, long long index);
+	long long readBigEndianLong(char* arr, long long index);
+	long long readLittleEndianLong(char* arr, long long index);
+	char* generateSaltedPassword(char* pw, int time);
+}
 #endif

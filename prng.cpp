@@ -19,7 +19,7 @@
  *
  * PRNG functions
  */
-#include "prng.h"
+#include "prng.hpp"
 // arr[0] = A, arr[1] = C, arr[2] = M, arr[3] = mod, arr[4] = initial advances
 const long long Prng::PRNG_1_VALS[5] = {135317LL, 610279LL, 1LL<<60, 28, 17LL};
 const long long Prng::PRNG_2_VALS[5] = {292069LL, 1429LL, 1LL<<48, 16, 157LL};

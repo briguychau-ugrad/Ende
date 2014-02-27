@@ -19,9 +19,9 @@
  *
  * Utility functions
  */
-#include "hash.h"
-#include "prng.h"
-#include "util.h"
+#include "hash.hpp"
+#include "prng.hpp"
+#include "util.hpp"
 #include <cstdlib>
 namespace Util {
 	void writeBigEndianInt(char* arr, long long index, int value) {

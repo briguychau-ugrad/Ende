@@ -19,8 +19,8 @@
  *
  * Hash functions
  */
-#include "hash.h"
-#include "util.h"
+#include "hash.hpp"
+#include "util.hpp"
 #include <cstdlib>
 const char Hash::VALS_A[16] = {(char)0x34, (char)0xee, (char)0x4e, (char)0xa7,
 			       (char)0x03, (char)0x44, (char)0x14, (char)0x07,

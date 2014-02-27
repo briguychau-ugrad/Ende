@@ -15,12 +15,12 @@
  *
  * Author information at http://www.brianchau.ca/
  *
- * hash.h
+ * hash.hpp
  *
  * Header file for hash functions
  */
-#ifndef _HASH_H
-#define _HASH_H
+#ifndef _HASH_HPP
+#define _HASH_HPP
 class Hash {
 private:
 	static const char VALS_A[16];
