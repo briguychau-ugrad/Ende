@@ -188,7 +188,6 @@ char* Hash::generateSHA_256(char* input, long long size) {
 	char* arr = (char*)std::calloc(arrsize, sizeof(char));
 	arr[0] = 0x80;
 	Util::writeBigEndianLong(arr, arrsize - 8, size << 3);
-	arr[arrsize-9] |= (char)((size >> 29) & 0x00000007);
 	unsigned int h0 = 0x6a09e667;
 	unsigned int h1 = 0xbb67ae85;
 	unsigned int h2 = 0x3c6ef372;
