@@ -90,7 +90,7 @@ namespace Util {
 	}
 	char* generateSaltedPassword(char* pw, int time) {
 		long long l;
-		for (l = 0; pw[l] != '\0'; l++) {
+		for (l = 0; pw[l] != '\0' && pw[l] != '\n' && pw[l] != '\r'; l++) {
 		}
 		int mt_seed = Hash::generateHashA(pw, l) ^ Hash::generateHashB(pw, l);
 		MersenneTwister mt = MersenneTwister(mt_seed);
