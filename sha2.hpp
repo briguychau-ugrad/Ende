@@ -15,23 +15,21 @@
  *
  * Author information at http://www.brianchau.ca/
  *
- * hash.hpp
+ * sha2.hpp
  *
- * Header file for hash functions
+ * Header file for SHA-2 functions
  */
-#ifndef _HASH_HPP
-#define _HASH_HPP
-class Hash {
+#ifndef _SHA2_HPP
+#define _SHA2_HPP
+class Sha2 {
 private:
-	static const char VALS_A[16];
-	static const char VALS_B[16];
-	static const int SHIFT_A[16];
-	static const int SHIFT_B[16];
-	static char get(int index, char f, char* arr, long long arrsize);
-	static char rotl8(char val, int n);
-	static char func(char a, char c, int x);
+	static const unsigned int VALS_SHA_256[64];
+	static const unsigned long long VALS_SHA_512[80];
+	static char getCharFromTwoFiles(long long index, char* first, char* second, long long firstsize);
+	static unsigned int rotr32u(unsigned int val, int n);
+	static unsigned long long rotr64u(unsigned long long val, int n);
 public:
-	static int generateHashA(char* input, long long size);
-	static int generateHashB(char* input, long long size);
+	static char* sha256(char* input, long long size);
+	static char* sha512(char* input, long long size);
 };
 #endif
