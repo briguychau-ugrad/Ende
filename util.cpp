@@ -88,13 +88,16 @@ namespace Util {
 		     | (((long long)arr[index+6] << 48) & 0x00ff000000000000LL)
 		     | (((long long)arr[index+7] << 56) & 0xff00000000000000LL);
 	}
-	char* generateSaltedPassword(char* pw, int time) {
+	char* generateSaltedPassword(char* pw, int seed) {
 		long long l;
 		for (l = 0; pw[l] != '\0' && pw[l] != '\n' && pw[l] != '\r'; l++) {
 		}
-		int mt_seed = Hash::generateHashA(pw, l) ^ Hash::generateHashB(pw, l);
-		MersenneTwister mt = MersenneTwister(mt_seed);
-		for (int i = 0; i < time % 128; i++) {
+		int a_val = Hash::generateHashA(pw, l);
+		int b_val = Hash::generateHashB(pw, l);
+		int adv_val = (int)(((unsigned int)(a_val ^ b_val)) % 1024);
+
+		MersenneTwister mt = MersenneTwister(seed);
+		for (int i = 0; i < adv_val; i++) {
 			mt.get();
 		}
 		char* arr = (char*)std::malloc((l + 17) * sizeof(char));
