@@ -95,7 +95,6 @@ namespace Util {
 		int a_val = Hash::generateHashA(pw, l);
 		int b_val = Hash::generateHashB(pw, l);
 		int adv_val = (int)(((unsigned int)(a_val ^ b_val)) % 1024);
-
 		MersenneTwister mt = MersenneTwister(seed);
 		for (int i = 0; i < adv_val; i++) {
 			mt.get();
